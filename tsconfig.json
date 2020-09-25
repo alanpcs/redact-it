@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017"],
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "es5",
+    "declaration": true,
+    "types": ["mocha", "node", "chai"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true
+  },
+  "compileOnSave": true,
+  "files": ["./index.ts"],
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

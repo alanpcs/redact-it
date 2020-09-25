@@ -1,0 +1,52 @@
+{
+  "name": "redact-it",
+  "version": "0.0.1",
+  "description": "A flexible tool to redact objects' data",
+  "author": "AlanPCS <alanpcsilva+npm@gmail.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/typings/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/nock": "^11.1.0",
+    "@types/node": "^13.11.1",
+    "@types/node-fetch": "^2.5.6",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^4.1.1",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "karma-nyan-reporter": "^0.2.5",
+    "mocha": "^7.1.1",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^15.0.1",
+    "prettier": "^1.19.1",
+    "ts-mocha": "^7.0.0",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.20.0",
+    "typescript": "^3.7.5"
+  },
+  "scripts": {
+    "test": "run-p lint test:compile test:mocha",
+    "test:ci": "run-p lint test:compile test:coverage",
+    "test:compile": "tsc",
+    "test:mocha": "ts-mocha --config test/.mocharc.json",
+    "test:watch": "yarn test:mocha --watch -R min",
+    "test:coverage": "nyc --reporter=text yarn test:mocha -R spec",
+    "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' 'test/**/*.ts' --fix",
+    "build": "tsc",
+    "deploy": "yarn build && npm publish"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/alanpcs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/alanpcs/redact-it.git",
+    "directory": "@alanpcs/redact-it"
+  }
+}

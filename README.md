@@ -7,3 +7,12 @@ never have the full information.
 
 This project aims to have a flexible yet powerful API to redact partially or
 entirely object values.
+
+```javascript
+const myData = { password: "123", name: "foo"};
+
+const replacerFunction = replaceIt({ fields: ["password"] });
+
+const stringResult = JSON.stringify(myData, replacerFunction);
+// '{"password": "[redacted]","name": "foo"}'
+```
