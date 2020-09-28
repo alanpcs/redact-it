@@ -27,15 +27,7 @@ jobs:
         run: |
           git describe --tags --abbrev=0 | cut -d "v" -f 2 > VERSION
           yarn version --new-version $(cat VERSION) --no-git-tag-version
-      - name: Publish to Github Packages
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v1
+      - uses: tool3/publisher@v1
         with:
-          node-version: 12
-          registry-url: "https://registry.npmjs.org"
-      - name: Publish to NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ secrets.NPM_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
