@@ -14,22 +14,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-          registry-url: https://npm.pkg.github.com/
+          registry-url: "https://registry.npmjs.org"
       - name: Install dependencies
         run: yarn install
-      - name: Run tests
-        run: yarn test
       - name: Build package
         run: yarn build
-      - name: Publish to Github Packages
-        run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v1
+      - name: Run tests
+        run: yarn test
+      - uses: tool3/publisher@v1
         with:
-          node-version: 12
-          registry-url: "https://registry.npmjs.org"
-      - name: Publish to NPM
-        run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm_token: ${{ secrets.NPM_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          scope: "@tool3"
