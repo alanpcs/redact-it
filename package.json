@@ -1,7 +1,7 @@
 {
   "name": "redact-it",
-  "version": "0.0.1",
-  "description": "A flexible tool to redact objects' data",
+  "version": "0.0.2",
+  "description": "A flexible tool to redact JS objects' data",
   "author": "AlanPCS <alanpcsilva+npm@gmail.com>",
   "license": "MIT",
   "main": "dist/index.cjs.js",
@@ -46,11 +46,8 @@
     "test:coverage": "nyc --reporter=text yarn test:mocha -R spec",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' 'test/**/*.ts' --fix",
-    "build": "rm -rf dist && rollup -c && tsc --emitDeclarationOnly",
+    "build": "rm -rf dist && rollup -c rollup.config.ts && tsc --emitDeclarationOnly",
     "deploy": "yarn build && npm publish"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/alanpcs"
   },
   "repository": {
     "type": "git",
