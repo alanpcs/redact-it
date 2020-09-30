@@ -6,24 +6,36 @@ on:
       - "v*"
 
 jobs:
-  publish:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
+      - name: Setup Node.js and set registry to github
         uses: actions/setup-node@v1
         with:
           node-version: 12
-          registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Build package
-        run: yarn build
-      - name: Parse version from git tag
-        run: |
-          git describe --tags --abbrev=0 | cut -d "v" -f 2 > VERSION
-          yarn version --new-version $(cat VERSION) --no-git-tag-version
-      - name: Publish to NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Run tests
+        run: yarn test
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+        registry-url: 'https://npm.pkg.github.com'
+    - run: npm install
+    - run: npm config set registry https://npm.pkg.github.com/alanpcs
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/setup-node@v1
+      with:
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm config set registry https://registry.npmjs.org
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
