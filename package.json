@@ -1,6 +1,6 @@
 {
   "name": "redact-it",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A flexible tool to redact JS objects' data",
   "author": "AlanPCS <alanpcsilva+npm@gmail.com>",
   "license": "MIT",
@@ -51,7 +51,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com/alanpcs/redact-it.git",
-    "directory": "@alanpcs/redact-it"
+    "url": "ssh://git@github.com/alanpcs/redact-it.git"
   }
 }
