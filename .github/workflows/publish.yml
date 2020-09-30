@@ -2,8 +2,6 @@ name: Publishes to NPM and Github packages
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
@@ -16,18 +14,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-          registry-url: https://npm.pkg.github.com/
+          registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build package
         run: yarn build
-      - name: Run tests
-        run: yarn test
       - name: Parse version from git tag
         run: |
           git describe --tags --abbrev=0 | cut -d "v" -f 2 > VERSION
           yarn version --new-version $(cat VERSION) --no-git-tag-version
-      - uses: tool3/publisher@v1
-        with:
-          npm_token: ${{ secrets.NPM_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

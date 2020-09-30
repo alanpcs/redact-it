@@ -1,9 +1,6 @@
 name: Pull request checks
 
-on:
-  pull_request:
-    branches:
-      - "*"
+on: [pull_request]
 
 jobs:
   publish:
@@ -21,8 +18,3 @@ jobs:
         run: yarn build
       - name: Run tests
         run: yarn test
-      - uses: tool3/publisher@v1
-        with:
-          npm_token: ${{ secrets.NPM_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          scope: "@tool3"
