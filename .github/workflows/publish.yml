@@ -25,17 +25,30 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: 12
         registry-url: 'https://npm.pkg.github.com'
-    - run: npm install
-    - run: npm config set registry https://npm.pkg.github.com/alanpcs
-    - run: npm publish
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Parse version from git tag
+      run: |
+        git describe --tags --abbrev=0 | cut -d "v" -f 2 > VERSION
+        yarn version --new-version $(cat VERSION) --no-git-tag-version
+
+    - name: Publishes to Github packages
+      run: |
+        npm config set registry https://npm.pkg.github.com/alanpcs
+        npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     - uses: actions/setup-node@v1
       with:
+        node-version: 12
         registry-url: 'https://registry.npmjs.org'
-    - run: npm config set registry https://registry.npmjs.org
-    - run: npm publish
+    - name: Publishes to NPM
+      run: |
+        npm config set registry https://registry.npmjs.org
+        sed -i 's/"@alanpcs\/redact-it"/"redact-it"/' package.json
+        npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
