@@ -1,1 +1,1 @@
-export { replaceIt } from "./src/redact-it";
+export { redactIt } from "./src/redact-it";
