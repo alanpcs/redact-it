@@ -1,4 +1,4 @@
-import { Mask, ReplaceIt, Options, ReplacerFunction } from "../typings";
+import { Mask, RedactIt, RedacItConfig, ReplacerFunction } from "../typings";
 
 const valueMasker = (value: any, mask: Mask): string => {
   const redactor = mask.redactWith ?? "[redacted]";
@@ -30,16 +30,31 @@ const valueMasker = (value: any, mask: Mask): string => {
   );
 };
 
-export const replaceIt: ReplaceIt = (options?: Options): ReplacerFunction => {
-  const optionFields = options?.fields ?? [];
-  const fields: string[] = ["password", ...optionFields];
+export const redactIt: RedactIt = (configs?: RedacItConfig| RedacItConfig[]): ReplacerFunction => {
   const defaultMask: Mask = {
     type: "percentage",
-  };
-  const mask: Mask = options?.mask ?? defaultMask;
+  }
+
+  const defaultOptions: RedacItConfig = {
+    fields: ["password"],
+    mask: defaultMask
+  }
+
+  const mappedFields: any = {};
+
+  const optionsArray: RedacItConfig[] = Array.isArray(configs) 
+    ? configs
+    : [configs ?? defaultOptions];
+
+  optionsArray.forEach((option: RedacItConfig) => {
+    option.fields.forEach((field) => {
+      mappedFields[field] = option.mask ?? defaultMask
+    })
+  })
 
   const replacer = (key: string, value: string): any => {
-    if (fields.includes(key)) {
+    const mask = mappedFields[key];
+    if (mask) {
       if (mask.type === "undefine") {
         return undefined;
       }
