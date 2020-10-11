@@ -6,7 +6,8 @@
     "declaration": true,
     "declarationDir": "dist",
     "esModuleInterop": true,
-    "lib": ["es2017"],
+    "lib": ["ES2019"],
+    "target": "ES2015",
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -17,7 +18,6 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "es5",
     "types": ["mocha", "node", "chai"]
   },
   "compileOnSave": true,
