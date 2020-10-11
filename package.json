@@ -1,6 +1,6 @@
 {
   "name": "@alanpcs/redact-it",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A flexible tool to redact JS objects' data",
   "author": "AlanPCS <alanpcsilva+npm@gmail.com>",
   "license": "MIT",
@@ -31,6 +31,7 @@
     "nyc": "^15.0.1",
     "prettier": "^1.19.1",
     "rollup": "^2.28.2",
+    "rollup-plugin-typescript2": "^0.27.3",
     "ts-mocha": "^7.0.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.20.0",
