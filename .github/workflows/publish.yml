@@ -29,6 +29,7 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
     - name: Install dependencies
       run: yarn install --frozen-lockfile
+    - run: yarn build
     - name: Parse version from git tag
       run: |
         git describe --tags --abbrev=0 | cut -d "v" -f 2 > VERSION
