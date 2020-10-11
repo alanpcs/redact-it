@@ -1,6 +1,6 @@
 {
   "name": "@alanpcs/redact-it",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A flexible tool to redact JS objects' data",
   "author": "AlanPCS <alanpcsilva+npm@gmail.com>",
   "license": "MIT",
