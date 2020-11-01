@@ -123,7 +123,6 @@ function to redact partial or entire object values.
 
 ### Roadmap
 - Support partial email redacting
-- Partial redacting positioning (start, middle, end)
 
 ## Contributing
 If you like this project and want to contribute with it, you can fork it and 
