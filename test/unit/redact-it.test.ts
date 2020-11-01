@@ -5,6 +5,7 @@ import { ReplacerFunction } from "../../typings";
 const defaultObject = {
   password: "123",
   name: "foo",
+  email: "foo123456789email@bar.com",
   card: {
     number: "1234567887654321",
     cvv: "123",
@@ -84,14 +85,53 @@ describe("Redact-it - Single configs argument", () => {
 
     expect(JSON.parse(stringResult).card.number).to.be.eq("123456788765****");
   });
+
+  it("should redact the middle digits when position center is used", async () => {
+    const myData = { ...defaultObject };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: ["email"],
+      mask: {
+        type: "percentage",
+        redactWith: "*",
+        percentage: 50,
+        position: "center",
+      },
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult).email).to.be.eq(
+      "foo123*************ar.com"
+    );
+  });
+
+  it("should redact the beginning and ending digits when position center is used and complementary is tru", async () => {
+    const myData = { ...defaultObject };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: ["email"],
+      mask: {
+        type: "percentage",
+        redactWith: "*",
+        percentage: 50,
+        position: "center",
+        complementary: true,
+      },
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult).email).to.be.eq(
+      "******456789email@b******"
+    );
+  });
 });
 
 describe("Redact-it - Multiple configs argument", () => {
   it("should redact the fields from the args with default mask when no mask is given", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt([
-      {fields: ["password"]},
-      {fields: ["expirationDate"]}
+      { fields: ["password"] },
+      { fields: ["expirationDate"] },
     ]);
 
     const stringResult = JSON.stringify(myData, replacerFunction);
@@ -109,27 +149,43 @@ describe("Redact-it - Multiple configs argument", () => {
   it("should redact the fields with the corresponding mask for each configs", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt([
-      {fields: ["password"], mask: {
-        type: "undefine"
-      }},
-      {fields: ["expirationDate", "number"], mask: {
-        type: "percentage", 
-        redactWith: "•",
-        percentage: 75
-      }},
-      {fields: ["cvv"]}
+      {
+        fields: ["email"],
+        mask: {
+          type: "percentage",
+          redactWith: "⊘",
+          percentage: 25,
+          position: "center",
+          complementary: true,
+        },
+      },
+      {
+        fields: ["password"],
+        mask: {
+          type: "undefine",
+        },
+      },
+      {
+        fields: ["expirationDate", "number"],
+        mask: {
+          type: "percentage",
+          redactWith: "•",
+          percentage: 75,
+        },
+      },
+      { fields: ["cvv"] },
     ]);
 
     const stringResult = JSON.stringify(myData, replacerFunction);
     const parsedResult = JSON.parse(stringResult);
-    
+
     expect(parsedResult.password).to.be.undefined;
+    expect(parsedResult.email).to.be.equal("⊘⊘⊘⊘⊘⊘⊘⊘⊘789emai⊘⊘⊘⊘⊘⊘⊘⊘⊘");
     expect(parsedResult.card).to.deep.equal({
-        ...defaultObject.card,
-        expirationDate: "••••••••20",
-        number: "••••••••••••4321",
-        cvv: "[redacted]",
+      ...defaultObject.card,
+      expirationDate: "••••••••20",
+      number: "••••••••••••4321",
+      cvv: "[redacted]",
     });
   });
-
 });

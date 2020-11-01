@@ -10,6 +10,7 @@ export interface Mask {
   redactWith?: "*" | "•" | "[redacted]" | string;
   percentage?: number;
   complementary?: boolean;
+  position?: "left" | "center" | "right";
 }
 
 /**
@@ -33,4 +34,6 @@ export type ReplacerFunction = (
  *  @param {RedacItConfig | RedacItConfig[]} configs - RedacItConfig to customize the redact function
  *  @param {function} replacer - A replacer function compatible with JSON.stringify
  */
-export type RedactIt = (configs?: RedacItConfig | RedacItConfig[]) => ReplacerFunction;
+export type RedactIt = (
+  configs?: RedacItConfig | RedacItConfig[]
+) => ReplacerFunction;
