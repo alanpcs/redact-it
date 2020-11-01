@@ -6,7 +6,7 @@ const valueMasker = (value: any, mask: Mask): string => {
   const complementary = mask.complementary ?? false;
   const position = mask.position ?? "left";
 
-  const finalRedactor = (p1: string) =>
+  const finalRedactor = (p1: string): string =>
     redactor.length > 1 ? redactor : p1.replace(/./g, redactor);
 
   if (percentage === 100) return finalRedactor(value);

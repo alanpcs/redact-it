@@ -3,7 +3,8 @@ name: Pull request checks
 on: [pull_request]
 
 jobs:
-  publish:
+  run-tests:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
