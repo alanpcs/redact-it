@@ -6,6 +6,10 @@ const valueMasker = (value: any, mask: Mask): string => {
   const complementary = mask.complementary ?? false;
   const position = mask.position ?? "left";
 
+  if (mask.type === "replace") {
+    return redactor;
+  }
+
   const finalRedactor = (p1: string): string =>
     redactor.length > 1 ? redactor : p1.replace(/./g, redactor);
 
@@ -47,7 +51,8 @@ export const redactIt: RedactIt = (
   configs?: RedacItConfig | RedacItConfig[]
 ): ReplacerFunction => {
   const defaultMask: Mask = {
-    type: "percentage",
+    type: "replace",
+    redactWith: "[redacted]",
   };
 
   const defaultOptions: RedacItConfig = {

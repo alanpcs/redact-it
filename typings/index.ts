@@ -6,7 +6,7 @@
  *  @param {boolean} complementary - Whether the complemetary part of the percentage should be masked
  */
 export interface Mask {
-  type: "percentage" | "undefine";
+  type: "percentage" | "undefine" | "replace";
   redactWith?: "*" | "•" | "[redacted]" | string;
   percentage?: number;
   complementary?: boolean;

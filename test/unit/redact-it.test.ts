@@ -3,14 +3,16 @@ import { redactIt } from "../../src/redact-it";
 import { ReplacerFunction } from "../../typings";
 
 const defaultObject = {
-  password: "123",
+  password: "senha.muito.segura123",
   name: "foo",
   email: "foo123456789email@bar.com",
+  TOKEN: "my-secret-access-token",
   card: {
     number: "1234567887654321",
     cvv: "123",
     expirationDate: "2020-12-20",
   },
+  authorization: "Bearer token",
 };
 
 describe("Redact-it - Single configs argument", () => {
@@ -60,6 +62,24 @@ describe("Redact-it - Single configs argument", () => {
       AUTHORIZATION: "[redacted]",
       authorization: "[redacted]",
       Authorization: "[redacted]",
+    });
+  });
+
+  it("should use redactWith string if 'replace' mask is used", async () => {
+    const myData = { ...defaultObject };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: ["password"],
+      mask: {
+        type: "replace",
+        redactWith: "[REDACTED]",
+      },
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult)).to.deep.equal({
+      ...defaultObject,
+      password: "[REDACTED]",
     });
   });
 
