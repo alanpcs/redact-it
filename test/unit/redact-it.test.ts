@@ -44,6 +44,25 @@ describe("Redact-it - Single configs argument", () => {
     });
   });
 
+  it("should redact based on regex field", async () => {
+    const myData = {
+      AUTHORIZATION: "uppercase",
+      authorization: "lowercase",
+      Authorization: "capitalized",
+    };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: [/Authorization/i],
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult)).to.deep.equal({
+      AUTHORIZATION: "[redacted]",
+      authorization: "[redacted]",
+      Authorization: "[redacted]",
+    });
+  });
+
   it("should remove the fields when the 'undefine' mask is used", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt({

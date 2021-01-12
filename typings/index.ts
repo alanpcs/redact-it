@@ -19,14 +19,11 @@ export interface Mask {
  *  @param {Mask} mask - Which mask to apply
  */
 export interface RedacItConfig {
-  fields: string[];
+  fields: (string | RegExp)[];
   mask?: Mask;
 }
 
-export type ReplacerFunction = (
-  key: string,
-  value: string
-) => string | undefined;
+export type ReplacerFunction = (key: any, value: any) => any;
 
 /**
  *  A function that takes the argument and creates a replacer function
