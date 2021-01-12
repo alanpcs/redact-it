@@ -76,6 +76,27 @@ describe("Redact-it - Single configs argument", () => {
     expect(parsedResult.card.cvv).to.be.undefined;
   });
 
+  /**
+   * By using `map[key]` directly, there is a risk we try to access Object.prototype keys,
+   * which is unsafe and may cause issues
+   */
+  it("should not redact Object.prototype keys", async () => {
+    const myData = {
+      constructor: () => 1,
+      toString: () => 1,
+      valueOf: () => 1,
+      hasOwnProperty: () => 1,
+      isPrototypeOf: () => 1,
+      propertyIsEnumerable: () => 1,
+    };
+    const replacerFunction: ReplacerFunction = redactIt();
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+    const parsedResult = JSON.parse(stringResult);
+
+    expect(parsedResult).to.be.deep.eq({});
+  });
+
   it("should redact the first 12 digits of a 16 digits value when a 75% percentage mask is used", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt({
