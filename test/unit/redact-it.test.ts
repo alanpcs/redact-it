@@ -228,4 +228,40 @@ describe("Redact-it - Multiple configs argument", () => {
       cvv: "[redacted]",
     });
   });
+
+  it("should prefer perfect match over a regex", async () => {
+    const myData = {
+      AUTHORIZATION: "uppercase",
+      authorization: "lowercase",
+      Authorization: "capitalized",
+    };
+    const replacerFunction: ReplacerFunction = redactIt([
+      {
+        fields: ["Authorization"],
+        mask: {
+          type: "undefine",
+        },
+      },
+      {
+        fields: [/Authorization/i],
+        mask: {
+          type: "percentage",
+          percentage: 50,
+          redactWith: "•",
+        },
+      },
+      {
+        fields: ["AUTHORIZATION"],
+        mask: {
+          type: "undefine",
+        },
+      },
+    ]);
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult)).to.deep.equal({
+      authorization: "•••••case",
+    });
+  });
 });

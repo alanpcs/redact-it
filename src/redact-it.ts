@@ -68,6 +68,11 @@ export const redactIt: RedactIt = (
   });
 
   const getMaskForKey = (key: any): Mask | null => {
+    const mask = mappedFields.get(key);
+    if (mask) {
+      return mask;
+    }
+
     for (const [matcher, mask] of mappedFields.entries()) {
       if (matcher instanceof RegExp) {
         if (matcher.test(key)) {
