@@ -5,12 +5,21 @@
  *  @param {number} percentage - Percentage of the value to apply the mask on
  *  @param {boolean} complementary - Whether the complemetary part of the percentage should be masked
  */
-export interface Mask {
-  type: "percentage" | "undefine" | "replace";
+export type Mask = PercentageMask | UndefineMask | ReplaceMask;
+
+export interface PercentageMask {
+  type: "percentage";
   redactWith?: "*" | "•" | "[redacted]" | string;
   percentage?: number;
   complementary?: boolean;
   position?: "left" | "center" | "right";
+}
+export interface UndefineMask {
+  type: "undefine";
+}
+export interface ReplaceMask {
+  type: "replace";
+  redactWith: "[redacted]" | string;
 }
 
 /**
