@@ -55,7 +55,7 @@ export const redactIt: RedactIt = (
     mask: defaultMask,
   };
 
-  const mappedFields: any = {};
+  const mappedFields: Map<string | RegExp, Mask> = new Map();
 
   const optionsArray: RedacItConfig[] = Array.isArray(configs)
     ? configs
@@ -63,12 +63,30 @@ export const redactIt: RedactIt = (
 
   optionsArray.forEach((option: RedacItConfig) => {
     option.fields.forEach((field) => {
-      mappedFields[field] = option.mask ?? defaultMask;
+      mappedFields.set(field, option.mask ?? defaultMask);
     });
   });
 
-  const replacer = (key: string, value: string): any => {
-    const mask = mappedFields[key];
+  const getMaskForKey = (key: any): Mask | null => {
+    const mask = mappedFields.get(key);
+    if (mask) {
+      return mask;
+    }
+
+    for (const [matcher, mask] of mappedFields.entries()) {
+      if (matcher instanceof RegExp) {
+        if (matcher.test(key)) {
+          return mask;
+        }
+      } else if (matcher === key) {
+        return mask;
+      }
+    }
+    return null;
+  };
+
+  const replacer = (key: any, value: any): any => {
+    const mask = getMaskForKey(key);
     if (mask) {
       if (mask.type === "undefine") {
         return undefined;

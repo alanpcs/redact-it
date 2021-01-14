@@ -44,6 +44,25 @@ describe("Redact-it - Single configs argument", () => {
     });
   });
 
+  it("should redact based on regex field", async () => {
+    const myData = {
+      AUTHORIZATION: "uppercase",
+      authorization: "lowercase",
+      Authorization: "capitalized",
+    };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: [/Authorization/i],
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult)).to.deep.equal({
+      AUTHORIZATION: "[redacted]",
+      authorization: "[redacted]",
+      Authorization: "[redacted]",
+    });
+  });
+
   it("should remove the fields when the 'undefine' mask is used", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt({
@@ -55,6 +74,27 @@ describe("Redact-it - Single configs argument", () => {
     const parsedResult = JSON.parse(stringResult);
     expect(parsedResult.password).to.be.undefined;
     expect(parsedResult.card.cvv).to.be.undefined;
+  });
+
+  /**
+   * By using `map[key]` directly, there is a risk we try to access Object.prototype keys,
+   * which is unsafe and may cause issues
+   */
+  it("should not redact Object.prototype keys", async () => {
+    const myData = {
+      constructor: () => 1,
+      toString: () => 1,
+      valueOf: () => 1,
+      hasOwnProperty: () => 1,
+      isPrototypeOf: () => 1,
+      propertyIsEnumerable: () => 1,
+    };
+    const replacerFunction: ReplacerFunction = redactIt();
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+    const parsedResult = JSON.parse(stringResult);
+
+    expect(parsedResult).to.be.deep.eq({});
   });
 
   it("should redact the first 12 digits of a 16 digits value when a 75% percentage mask is used", async () => {
@@ -186,6 +226,42 @@ describe("Redact-it - Multiple configs argument", () => {
       expirationDate: "••••••••20",
       number: "••••••••••••4321",
       cvv: "[redacted]",
+    });
+  });
+
+  it("should prefer perfect match over a regex", async () => {
+    const myData = {
+      AUTHORIZATION: "uppercase",
+      authorization: "lowercase",
+      Authorization: "capitalized",
+    };
+    const replacerFunction: ReplacerFunction = redactIt([
+      {
+        fields: ["Authorization"],
+        mask: {
+          type: "undefine",
+        },
+      },
+      {
+        fields: [/Authorization/i],
+        mask: {
+          type: "percentage",
+          percentage: 50,
+          redactWith: "•",
+        },
+      },
+      {
+        fields: ["AUTHORIZATION"],
+        mask: {
+          type: "undefine",
+        },
+      },
+    ]);
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult)).to.deep.equal({
+      authorization: "•••••case",
     });
   });
 });
