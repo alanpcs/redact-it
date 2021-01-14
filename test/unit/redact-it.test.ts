@@ -3,7 +3,7 @@ import { redactIt } from "../../src/redact-it";
 import { ReplacerFunction } from "../../typings";
 
 const defaultObject = {
-  password: "senha.muito.segura123",
+  password: "very.strong.password123",
   name: "foo",
   email: "foo123456789email@bar.com",
   TOKEN: "my-secret-access-token",
@@ -71,7 +71,7 @@ describe("Redact-it - Single configs argument", () => {
       fields: ["password"],
       mask: {
         type: "replace",
-        redactWith: "[REDACTED]",
+        redactWith: "(ommited value)",
       },
     });
 
@@ -79,7 +79,7 @@ describe("Redact-it - Single configs argument", () => {
 
     expect(JSON.parse(stringResult)).to.deep.equal({
       ...defaultObject,
-      password: "[REDACTED]",
+      password: "(ommited value)",
     });
   });
 
