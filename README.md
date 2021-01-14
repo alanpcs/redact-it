@@ -55,18 +55,18 @@ const userInfoToBeLogged = {
     cvv: "123",
     expirationDate: "2020-12-20",
   },
+  authorization: "Bearer token",
 };
 ```
 
 ### Default usage
 
 If the idea is to redact the data entirely, you just need to to name the fields.
-The default `Mask` is the `percentage` with `100`% redacting with the fixed
-string `[redacted]`;
+The default `Mask` is the `replace` with the fixed string `[redacted]`:
 
 ```typescript
 const redactItConfig: RedactItConfig = {
-  fields: ["password", "cvv"],
+  fields: ["password", "cvv", "TOKEN", "authorization"],
 };
 
 const replacerFunction: ReplacerFunction = redactIt(redactItConfig);
@@ -78,11 +78,13 @@ const parsedResult = JSON.parse(stringResult);
 {
   name: 'foo',
   password: '[redacted]',
+  TOKEN: '[redacted]'
   card: {
     number: '1234567887654321',
     cvv: '[redacted]',
     expirationDate: '2020-12-20',
-  }
+  },
+  authorization: "[redacted]"
 }
 */
 ```
@@ -109,6 +111,13 @@ const redactItConfig: RedactItConfig = [
       percentage: 75, // 75% of the value should be redacted
     },
   },
+  {
+    fields: ["authorization"],
+    mask: {
+      type: "replace", // Replaces the whole value with the `redactWith` string
+      redactWith: "[REDACTED FOR COMPLIANCE REASONS]",
+    },
+  },
   { fields: ["cvv"] }, // if no mask is passed, fields values are redacted as [redacted]
 ];
 
@@ -125,7 +134,8 @@ const parsedResult = JSON.parse(stringResult);
     number: '••••••••••••4321',
     cvv: '[redacted]',
     expirationDate: '••••••••20'
-  }
+  },
+  authorization: "[REDACTED FOR COMPLIANCE REASONS]"
 }
 */
 ```
