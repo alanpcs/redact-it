@@ -49,6 +49,7 @@ For the following examples, we are going to use this main object as reference:
 const userInfoToBeLogged = {
   password: "123",
   name: "foo",
+  TOKEN: "my-secret-access-token",
   card: {
     number: "1234567887654321",
     cvv: "123",
@@ -119,7 +120,7 @@ const parsedResult = JSON.parse(stringResult);
 /* parsedResult
 {
   name: 'foo',
-  TOKEN: 'redacted',
+  TOKEN: '[redacted]',
   card: {
     number: '••••••••••••4321',
     cvv: '[redacted]',
