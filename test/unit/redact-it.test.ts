@@ -165,7 +165,7 @@ describe("Redact-it - Single configs argument", () => {
     );
   });
 
-  it("should redact the beginning and ending digits when position center is used and complementary is tru", async () => {
+  it("should redact the beginning and ending digits when position center is used and complementary is true", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt({
       fields: ["email"],
@@ -182,6 +182,22 @@ describe("Redact-it - Single configs argument", () => {
 
     expect(JSON.parse(stringResult).email).to.be.eq(
       "******456789email@b******"
+    );
+  });
+
+  it("should default to 100% mask with • if percentage mask is used", async () => {
+    const myData = { ...defaultObject };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: ["email"],
+      mask: {
+        type: "percentage",
+      },
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult).email).to.be.eq(
+      "•••••••••••••••••••••••••"
     );
   });
 });

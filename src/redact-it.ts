@@ -10,7 +10,7 @@ const percentageValueMasker = (
   value: any,
   mask: PercentageMask
 ): string | undefined => {
-  const redactor = mask.redactWith ?? "[redacted]";
+  const redactor = mask.redactWith ?? "•";
   const percentage = mask.percentage ?? 100;
   const complementary = mask.complementary ?? false;
   const position = mask.position ?? "left";
