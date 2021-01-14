@@ -1,14 +1,19 @@
-import { Mask, RedactIt, RedacItConfig, ReplacerFunction } from "../typings";
+import {
+  Mask,
+  RedactIt,
+  RedacItConfig,
+  ReplacerFunction,
+  PercentageMask,
+} from "../typings";
 
-const valueMasker = (value: any, mask: Mask): string => {
+const percentageValueMasker = (
+  value: any,
+  mask: PercentageMask
+): string | undefined => {
   const redactor = mask.redactWith ?? "[redacted]";
   const percentage = mask.percentage ?? 100;
   const complementary = mask.complementary ?? false;
   const position = mask.position ?? "left";
-
-  if (mask.type === "replace") {
-    return redactor;
-  }
 
   const finalRedactor = (p1: string): string =>
     redactor.length > 1 ? redactor : p1.replace(/./g, redactor);
@@ -93,10 +98,13 @@ export const redactIt: RedactIt = (
   const replacer = (key: any, value: any): any => {
     const mask = getMaskForKey(key);
     if (mask) {
+      if (mask.type === "replace") {
+        return mask.redactWith;
+      }
       if (mask.type === "undefine") {
         return undefined;
       }
-      return valueMasker(value, mask);
+      return percentageValueMasker(value, mask);
     }
     return value;
   };
