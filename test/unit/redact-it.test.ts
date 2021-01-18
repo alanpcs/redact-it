@@ -300,4 +300,30 @@ describe("Redact-it - Multiple configs argument", () => {
       authorization: "•••••case",
     });
   });
+
+  it("overrides configs for same field", () => {
+    const myData = { ...defaultObject };
+    const replacerFunction = redactIt([
+      {
+        fields: ["email", "name"],
+        mask: {
+          type: "replace",
+          redactWith: "firstRule",
+        },
+      },
+      {
+        fields: ["email"],
+        mask: {
+          type: "replace",
+          redactWith: "secondRule",
+        },
+      },
+    ]);
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+    const parsedResult = JSON.parse(stringResult);
+
+    expect(parsedResult.name).to.be.equal("firstRule");
+    expect(parsedResult.email).to.be.equal("secondRule");
+  });
 });
