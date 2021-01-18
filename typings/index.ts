@@ -1,6 +1,31 @@
-export type Mask = PercentageMask | UndefineMask | ReplaceMask;
+export type Mask =
+  | PercentageMask
+  | CenterPercentageMask
+  | UndefineMask
+  | ReplaceMask;
+
 export interface PercentageMask {
   type: "percentage";
+  /**
+   * Character to be used as the redacted part
+   * @default "•"
+   */
+  redactWith?: "*" | "•" | string;
+  /**
+   * Percentage of the value to apply the mask on
+   * @default 100
+   */
+  percentage?: number;
+  /**
+   * Which part of the value to redact
+   * @default "left"
+   */
+  position?: "left" | "right";
+}
+
+export interface CenterPercentageMask {
+  type: "percentage";
+  position: "center";
   /**
    * Character to be used as the redacted part
    * @default "•"
@@ -16,12 +41,8 @@ export interface PercentageMask {
    * @default false
    */
   complementary?: boolean;
-  /**
-   * Which part of the value to redact
-   * @default "left"
-   */
-  position?: "left" | "center" | "right";
 }
+
 export interface UndefineMask {
   type: "undefine";
 }
@@ -34,7 +55,7 @@ export interface ReplaceMask {
   redactWith: "[redacted]" | string;
 }
 
-export interface RedactConfig {
+export interface RedactItConfig {
   /** Field names to redact */
   fields: (string | RegExp)[];
   /** Which mask to apply */
