@@ -55,6 +55,7 @@ export interface ReplaceMask {
   redactWith: "[redacted]" | string;
 }
 
+/** Redact-it configs to customize how and which fields are going to be redacted */
 export interface RedactItConfig {
   /** Field names to redact */
   fields: (string | RegExp)[];
