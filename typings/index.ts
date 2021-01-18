@@ -27,7 +27,7 @@ export interface ReplaceMask {
  *  @param {string[]} fields - Field names to redact
  *  @param {Mask} mask - Which mask to apply
  */
-export interface RedacItConfig {
+export interface RedactItConfig {
   fields: (string | RegExp)[];
   mask?: Mask;
 }
@@ -37,9 +37,9 @@ export type ReplacerFunction = (key: any, value: any) => any;
 /**
  *  A function that takes the argument and creates a replacer function
  *  The arguement may be a single object of the RedacItConfig type or an array of these objects
- *  @param {RedacItConfig | RedacItConfig[]} configs - RedacItConfig to customize the redact function
+ *  @param {RedactItConfig | RedactItConfig[]} configs - RedacItConfig to customize the redact function
  *  @param {function} replacer - A replacer function compatible with JSON.stringify
  */
 export type RedactIt = (
-  configs?: RedacItConfig | RedacItConfig[]
+  configs?: RedactItConfig | RedactItConfig[]
 ) => ReplacerFunction;

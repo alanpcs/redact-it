@@ -1,7 +1,7 @@
 import {
   Mask,
   RedactIt,
-  RedacItConfig,
+  RedactItConfig,
   ReplacerFunction,
   PercentageMask,
 } from "../typings";
@@ -53,25 +53,25 @@ const percentageValueMasker = (
 };
 
 export const redactIt: RedactIt = (
-  configs?: RedacItConfig | RedacItConfig[]
+  configs?: RedactItConfig | RedactItConfig[]
 ): ReplacerFunction => {
   const defaultMask: Mask = {
     type: "replace",
     redactWith: "[redacted]",
   };
 
-  const defaultOptions: RedacItConfig = {
+  const defaultOptions: RedactItConfig = {
     fields: ["password"],
     mask: defaultMask,
   };
 
   const mappedFields: Map<string | RegExp, Mask> = new Map();
 
-  const optionsArray: RedacItConfig[] = Array.isArray(configs)
+  const optionsArray: RedactItConfig[] = Array.isArray(configs)
     ? configs
     : [configs ?? defaultOptions];
 
-  optionsArray.forEach((option: RedacItConfig) => {
+  optionsArray.forEach((option: RedactItConfig) => {
     option.fields.forEach((field) => {
       mappedFields.set(field, option.mask ?? defaultMask);
     });
