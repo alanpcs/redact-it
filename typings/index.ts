@@ -1,45 +1,77 @@
-/**
- *  Mask options
- *  @param {string} type - Type of the mask to be applied
- *  @param {string} redactWith - Character or word to be used as the redacted part
- *  @param {number} percentage - Percentage of the value to apply the mask on
- *  @param {boolean} complementary - Whether the complemetary part of the percentage should be masked
- */
-export type Mask = PercentageMask | UndefineMask | ReplaceMask;
+export type Mask =
+  | PercentageMask
+  | CenterPercentageMask
+  | UndefineMask
+  | ReplaceMask;
 
 export interface PercentageMask {
   type: "percentage";
-  redactWith?: "*" | "•" | "[redacted]" | string;
+  /**
+   * Character to be used as the redacted part
+   * @default "•"
+   */
+  redactWith?: "*" | "•" | string;
+  /**
+   * Percentage of the value to apply the mask on
+   * @default 100
+   */
   percentage?: number;
-  complementary?: boolean;
-  position?: "left" | "center" | "right";
+  /**
+   * Which part of the value to redact
+   * @default "left"
+   */
+  position?: "left" | "right";
 }
+
+export interface CenterPercentageMask {
+  type: "percentage";
+  position: "center";
+  /**
+   * Character to be used as the redacted part
+   * @default "•"
+   */
+  redactWith?: "*" | "•" | string;
+  /**
+   * Percentage of the value to apply the mask on
+   * @default 100
+   */
+  percentage?: number;
+  /**
+   * Whether the complementary part of the percentage should be masked
+   * @default false
+   */
+  complementary?: boolean;
+}
+
 export interface UndefineMask {
   type: "undefine";
 }
 export interface ReplaceMask {
   type: "replace";
+  /**
+   * Replace the value entirely with this string
+   * @default "[redacted]"
+   */
   redactWith: "[redacted]" | string;
 }
 
-/**
- *  Redact-it configs to customize how and which fields are going to be redacted
- *  @param {string[]} fields - Field names to redact
- *  @param {Mask} mask - Which mask to apply
- */
-export interface RedacItConfig {
+/** Redact-it configs to customize how and which fields are going to be redacted */
+export interface RedactItConfig {
+  /** Field names to redact */
   fields: (string | RegExp)[];
+  /** Which mask to apply */
   mask?: Mask;
 }
 
+/** A replacer function compatible with JSON.stringify */
 export type ReplacerFunction = (key: any, value: any) => any;
 
 /**
  *  A function that takes the argument and creates a replacer function
- *  The arguement may be a single object of the RedacItConfig type or an array of these objects
- *  @param {RedacItConfig | RedacItConfig[]} configs - RedacItConfig to customize the redact function
- *  @param {function} replacer - A replacer function compatible with JSON.stringify
+ *  The argument may be a single object of the RedactItConfig type or an array of these objects
+ *  @param {RedactItConfig | RedactItConfig[]} configs - RedactItConfig to customize the redact function
+ *  @return {ReplacerFunction} replacer - A replacer function compatible with JSON.stringify
  */
 export type RedactIt = (
-  configs?: RedacItConfig | RedacItConfig[]
+  configs?: RedactItConfig | RedactItConfig[]
 ) => ReplacerFunction;

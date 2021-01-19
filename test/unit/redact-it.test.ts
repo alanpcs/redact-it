@@ -129,23 +129,6 @@ describe("Redact-it - Single configs argument", () => {
     expect(JSON.parse(stringResult).card.number).to.be.eq("************4321");
   });
 
-  it("should redact the last 4 digits of a 16 digits value when a 75% complementary percentage mask is used", async () => {
-    const myData = { ...defaultObject };
-    const replacerFunction: ReplacerFunction = redactIt({
-      fields: ["number"],
-      mask: {
-        type: "percentage",
-        redactWith: "*",
-        percentage: 75,
-        complementary: true,
-      },
-    });
-
-    const stringResult = JSON.stringify(myData, replacerFunction);
-
-    expect(JSON.parse(stringResult).card.number).to.be.eq("123456788765****");
-  });
-
   it("should redact the middle digits when position center is used", async () => {
     const myData = { ...defaultObject };
     const replacerFunction: ReplacerFunction = redactIt({
@@ -162,6 +145,25 @@ describe("Redact-it - Single configs argument", () => {
 
     expect(JSON.parse(stringResult).email).to.be.eq(
       "foo123*************ar.com"
+    );
+  });
+
+  it("should redact the last digits when position right is used", async () => {
+    const myData = { ...defaultObject };
+    const replacerFunction: ReplacerFunction = redactIt({
+      fields: ["email"],
+      mask: {
+        type: "percentage",
+        redactWith: "*",
+        percentage: 75,
+        position: "right",
+      },
+    });
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+
+    expect(JSON.parse(stringResult).email).to.be.eq(
+      "foo123*******************"
     );
   });
 
@@ -299,5 +301,31 @@ describe("Redact-it - Multiple configs argument", () => {
     expect(JSON.parse(stringResult)).to.deep.equal({
       authorization: "•••••case",
     });
+  });
+
+  it("overrides configs for same field", () => {
+    const myData = { ...defaultObject };
+    const replacerFunction = redactIt([
+      {
+        fields: ["email", "name"],
+        mask: {
+          type: "replace",
+          redactWith: "firstRule",
+        },
+      },
+      {
+        fields: ["email"],
+        mask: {
+          type: "replace",
+          redactWith: "secondRule",
+        },
+      },
+    ]);
+
+    const stringResult = JSON.stringify(myData, replacerFunction);
+    const parsedResult = JSON.parse(stringResult);
+
+    expect(parsedResult.name).to.be.equal("firstRule");
+    expect(parsedResult.email).to.be.equal("secondRule");
   });
 });

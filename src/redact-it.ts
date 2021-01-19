@@ -1,18 +1,20 @@
 import {
   Mask,
   RedactIt,
-  RedacItConfig,
+  RedactItConfig,
   ReplacerFunction,
   PercentageMask,
+  CenterPercentageMask,
 } from "../typings";
 
 const percentageValueMasker = (
   value: any,
-  mask: PercentageMask
+  mask: PercentageMask | CenterPercentageMask
 ): string | undefined => {
   const redactor = mask.redactWith ?? "•";
   const percentage = mask.percentage ?? 100;
-  const complementary = mask.complementary ?? false;
+  const complementary =
+    (mask.position === "center" && mask.complementary) ?? false;
   const position = mask.position ?? "left";
 
   const finalRedactor = (p1: string): string =>
@@ -29,6 +31,9 @@ const percentageValueMasker = (
     if (position === "center") {
       return `(.{${unmaskedLength / 2}})(.{${maskedLength}})(.+)`;
     }
+    if (position === "right") {
+      return `(.{${unmaskedLength}})(.{${maskedLength}})`;
+    }
     return `(.{${maskedLength}})(.{${unmaskedLength}})`;
   };
 
@@ -36,14 +41,18 @@ const percentageValueMasker = (
 
   const masoq = (_match: any, p1: string, p2: string, p3?: string): string => {
     if (p3 && complementary) {
+      // Center + complementary
       return `${finalRedactor(p1)}${p2}${finalRedactor(p3)}`;
     }
     if (p3) {
+      // Center
       return `${p1}${finalRedactor(p2)}${p3}`;
     }
-    if (complementary || (position === "right" && !complementary)) {
+    if (position === "right") {
+      // Right
       return `${p1}${finalRedactor(p2)}`;
     }
+    // Left
     return `${finalRedactor(p1)}${p2}`;
   };
 
@@ -53,25 +62,25 @@ const percentageValueMasker = (
 };
 
 export const redactIt: RedactIt = (
-  configs?: RedacItConfig | RedacItConfig[]
+  configs?: RedactItConfig | RedactItConfig[]
 ): ReplacerFunction => {
   const defaultMask: Mask = {
     type: "replace",
     redactWith: "[redacted]",
   };
 
-  const defaultOptions: RedacItConfig = {
+  const defaultOptions: RedactItConfig = {
     fields: ["password"],
     mask: defaultMask,
   };
 
   const mappedFields: Map<string | RegExp, Mask> = new Map();
 
-  const optionsArray: RedacItConfig[] = Array.isArray(configs)
+  const optionsArray: RedactItConfig[] = Array.isArray(configs)
     ? configs
     : [configs ?? defaultOptions];
 
-  optionsArray.forEach((option: RedacItConfig) => {
+  optionsArray.forEach((option: RedactItConfig) => {
     option.fields.forEach((field) => {
       mappedFields.set(field, option.mask ?? defaultMask);
     });
