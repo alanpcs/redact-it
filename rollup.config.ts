@@ -1,6 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import babel from "@rollup/plugin-babel";
-import typescript from 'rollup-plugin-typescript2'
+import typescript from "@rollup/plugin-typescript"; // <-- fix here
 import pkg from "./package.json";
 
 const extensions = [".ts"];
@@ -11,8 +11,8 @@ export default [
     external: [/@babel\/runtime/],
     plugins: [
       typescript({
-        typescript: require('typescript'),
-        tsconfigOverride: { compilerOptions : { module: "es2015" } }
+        tsconfig: "./tsconfig.json",
+        sourceMap: true,
       }),
       resolve({
         extensions,
@@ -27,10 +27,12 @@ export default [
       {
         file: pkg.main,
         format: "cjs",
+        sourcemap: true,
       },
       {
         file: pkg.module,
         format: "es",
+        sourcemap: true,
       },
     ],
   },

@@ -1,5 +1,6 @@
 {
-  "require": ["test/setup.ts"],
+  "require": ["ts-node/register", "test/setup.ts"],
+  "spec": "test/unit/*.test.ts",
   "diff": true,
   "extension": ["ts"],
   "reporter": "nyan",
