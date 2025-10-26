@@ -3,7 +3,7 @@ name: Publishes to NPM and Github packages
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 jobs:
   tests:
@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 24
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: 'https://npm.pkg.github.com'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - run: yarn build
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 24
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
       - name: Publishes to NPM
         run: |
           npm config set registry https://registry.npmjs.org
