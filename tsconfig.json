@@ -7,7 +7,7 @@
     "declarationDir": "dist",
     "esModuleInterop": true,
     "lib": ["ES2019"],
-    "target": "ES2015",
+    "target": "ES2019",
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -18,7 +18,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "types": ["mocha", "node", "chai"]
+    "types": ["node", "chai", "jest"]
   },
   "compileOnSave": true,
   "files": ["./index.ts"],

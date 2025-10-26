@@ -1,6 +1,7 @@
 import eslint from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
+import pluginJest from "eslint-plugin-jest";
 
 export default [
   eslint.configs.recommended,
@@ -13,6 +14,7 @@ export default [
         sourceType: "module",
       },
       globals: {
+        expect: "readonly",
         describe: "readonly",
         it: "readonly",
         before: "readonly",
@@ -39,6 +41,21 @@ export default [
           allowHigherOrderFunctions: true,
         },
       ],
+    },
+  },
+  {
+    // update this to match your test files
+    files: ["**/*.spec.js", "**/*.test.js"],
+    plugins: { jest: pluginJest },
+    languageOptions: {
+      globals: pluginJest.environments.globals.globals,
+    },
+    rules: {
+      "jest/no-disabled-tests": "warn",
+      "jest/no-focused-tests": "error",
+      "jest/no-identical-title": "error",
+      "jest/prefer-to-have-length": "warn",
+      "jest/valid-expect": "error",
     },
   },
 ];
