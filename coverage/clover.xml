@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761491800498" clover="3.2.0">
-  <project timestamp="1761491800498" name="All files">
+<coverage generated="1761493068018" clover="3.2.0">
+  <project timestamp="1761493068018" name="All files">
     <metrics statements="121" coveredstatements="119" conditionals="47" coveredconditionals="45" methods="7" coveredmethods="7" elements="175" coveredelements="171" complexity="0" loc="121" ncloc="121" packages="1" files="1" classes="1"/>
     <file name="redact-it.ts" path="/home/alan/Repos/alanpcs/redact-it/src/redact-it.ts">
       <metrics statements="121" coveredstatements="119" conditionals="47" coveredconditionals="45" methods="7" coveredmethods="7"/>
