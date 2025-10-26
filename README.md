@@ -47,15 +47,15 @@ For the following examples, we are going to use this main object as reference:
 
 ```typescript
 const userInfoToBeLogged = {
-  password: "123",
-  name: "foo",
-  TOKEN: "my-secret-access-token",
+  password: '123',
+  name: 'foo',
+  TOKEN: 'my-secret-access-token',
   card: {
-    number: "1234567887654321",
-    cvv: "123",
-    expirationDate: "2020-12-20",
+    number: '1234567887654321',
+    cvv: '123',
+    expirationDate: '2020-12-20',
   },
-  authorization: "Bearer token",
+  authorization: 'Bearer token',
 };
 ```
 
@@ -66,7 +66,7 @@ The default `Mask` is the `replace` with the fixed string `[redacted]`:
 
 ```typescript
 const redactItConfig: RedactItConfig = {
-  fields: ["password", "cvv", "TOKEN", "authorization"],
+  fields: ['password', 'cvv', 'TOKEN', 'authorization'],
 };
 
 const replacerFunction: ReplacerFunction = redactIt(redactItConfig);
@@ -94,31 +94,31 @@ const parsedResult = JSON.parse(stringResult);
 ```typescript
 const redactItConfig: RedactItConfig = [
   {
-    fields: ["password"], // which fields to redact
+    fields: ['password'], // which fields to redact
     mask: {
       // How to redact the fields
-      type: "undefine", // the undefine mask removes the fields
+      type: 'undefine', // the undefine mask removes the fields
     },
   },
   {
     fields: [/token/i], // Will match the regex against all fields
   },
   {
-    fields: ["expirationDate", "number"],
+    fields: ['expirationDate', 'number'],
     mask: {
-      type: "percentage", // Percentage masks redact data partially
-      redactWith: "•", // Redacted characters replaced by •
+      type: 'percentage', // Percentage masks redact data partially
+      redactWith: '•', // Redacted characters replaced by •
       percentage: 75, // 75% of the value should be redacted
     },
   },
   {
-    fields: ["authorization"],
+    fields: ['authorization'],
     mask: {
-      type: "replace", // Replaces the whole value with the `redactWith` string
-      redactWith: "[REDACTED FOR COMPLIANCE REASONS]",
+      type: 'replace', // Replaces the whole value with the `redactWith` string
+      redactWith: '[REDACTED FOR COMPLIANCE REASONS]',
     },
   },
-  { fields: ["cvv"] }, // if no mask is passed, fields values are redacted as [redacted]
+  { fields: ['cvv'] }, // if no mask is passed, fields values are redacted as [redacted]
 ];
 
 const replacerFunction: ReplacerFunction = redactIt(redactItConfig);

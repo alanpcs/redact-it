@@ -18,13 +18,16 @@
     "test:coverage": "nyc --reporter=text yarn test -R spec",
     "lint": "eslint --config .eslintrc.config.ts 'src/**/*.ts' 'src/**/*.test.ts'",
     "lint:fix": "yarn lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "build": "rm -rf dist && rollup -c rollup.config.ts --bundleConfigAsCjs && tsc --emitDeclarationOnly",
     "deploy": "yarn build && npm publish",
     "bless": "yarn tsc --noEmit && yarn lint && yarn test && yarn build"
   },
   "resolutions": {
     "cross-spawn": "^7.0.5",
-    "brace-expansion": "^2.0.2"
+    "brace-expansion": "^2.0.2",
+    "@babel/generator": "7.28.5"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

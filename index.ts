@@ -1,2 +1,2 @@
-export { redactIt } from "./src/redact-it";
-export * from "./typings";
+export { redactIt } from './src/redact-it';
+export * from './typings';
