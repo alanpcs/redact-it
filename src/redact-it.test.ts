@@ -1,6 +1,5 @@
-import { expect } from "chai";
-import { redactIt } from "../../src/redact-it";
-import { ReplacerFunction } from "../../typings";
+import { redactIt } from "./redact-it";
+import { ReplacerFunction } from "../typings";
 
 const defaultObject = {
   password: "very.strong.password123",
@@ -22,7 +21,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       ...defaultObject,
       password: "[redacted]",
     });
@@ -36,7 +35,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       ...defaultObject,
       password: "[redacted]",
       card: {
@@ -58,7 +57,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       AUTHORIZATION: "[redacted]",
       authorization: "[redacted]",
       Authorization: "[redacted]",
@@ -77,7 +76,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       ...defaultObject,
       password: "(ommited value)",
     });
@@ -92,8 +91,8 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
     const parsedResult = JSON.parse(stringResult);
-    expect(parsedResult.password).to.be.undefined;
-    expect(parsedResult.card.cvv).to.be.undefined;
+    expect(parsedResult.password).toBeUndefined();
+    expect(parsedResult.card.cvv).toBeUndefined();
   });
 
   /**
@@ -114,7 +113,7 @@ describe("Redact-it - Single configs argument", () => {
     const stringResult = JSON.stringify(myData, replacerFunction);
     const parsedResult = JSON.parse(stringResult);
 
-    expect(parsedResult).to.be.deep.eq({});
+    expect(parsedResult).toEqual({});
   });
 
   it("should redact the first 12 digits of a 16 digits value when a 75% percentage mask is used", async () => {
@@ -126,7 +125,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult).card.number).to.be.eq("************4321");
+    expect(JSON.parse(stringResult).card.number).toBe("************4321");
   });
 
   it("should redact the middle digits when position center is used", async () => {
@@ -143,9 +142,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult).email).to.be.eq(
-      "foo123*************ar.com"
-    );
+    expect(JSON.parse(stringResult).email).toBe("foo123*************ar.com");
   });
 
   it("should redact the last digits when position right is used", async () => {
@@ -162,9 +159,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult).email).to.be.eq(
-      "foo123*******************"
-    );
+    expect(JSON.parse(stringResult).email).toBe("foo123*******************");
   });
 
   it("should redact the beginning and ending digits when position center is used and complementary is true", async () => {
@@ -182,9 +177,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult).email).to.be.eq(
-      "******456789email@b******"
-    );
+    expect(JSON.parse(stringResult).email).toBe("******456789email@b******");
   });
 
   it("should default to 100% mask with • if percentage mask is used", async () => {
@@ -198,9 +191,7 @@ describe("Redact-it - Single configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult).email).to.be.eq(
-      "•••••••••••••••••••••••••"
-    );
+    expect(JSON.parse(stringResult).email).toBe("•••••••••••••••••••••••••");
   });
 });
 
@@ -214,7 +205,7 @@ describe("Redact-it - Multiple configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       ...defaultObject,
       password: "[redacted]",
       card: {
@@ -257,9 +248,9 @@ describe("Redact-it - Multiple configs argument", () => {
     const stringResult = JSON.stringify(myData, replacerFunction);
     const parsedResult = JSON.parse(stringResult);
 
-    expect(parsedResult.password).to.be.undefined;
-    expect(parsedResult.email).to.be.equal("⊘⊘⊘⊘⊘⊘⊘⊘⊘789emai⊘⊘⊘⊘⊘⊘⊘⊘⊘");
-    expect(parsedResult.card).to.deep.equal({
+    expect(parsedResult.password).toBeUndefined();
+    expect(parsedResult.email).toBe("⊘⊘⊘⊘⊘⊘⊘⊘⊘789emai⊘⊘⊘⊘⊘⊘⊘⊘⊘");
+    expect(parsedResult.card).toEqual({
       ...defaultObject.card,
       expirationDate: "••••••••20",
       number: "••••••••••••4321",
@@ -298,7 +289,7 @@ describe("Redact-it - Multiple configs argument", () => {
 
     const stringResult = JSON.stringify(myData, replacerFunction);
 
-    expect(JSON.parse(stringResult)).to.deep.equal({
+    expect(JSON.parse(stringResult)).toEqual({
       authorization: "•••••case",
     });
   });
@@ -325,7 +316,7 @@ describe("Redact-it - Multiple configs argument", () => {
     const stringResult = JSON.stringify(myData, replacerFunction);
     const parsedResult = JSON.parse(stringResult);
 
-    expect(parsedResult.name).to.be.equal("firstRule");
-    expect(parsedResult.email).to.be.equal("secondRule");
+    expect(parsedResult.name).toBe("firstRule");
+    expect(parsedResult.email).toBe("secondRule");
   });
 });
