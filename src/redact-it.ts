@@ -5,17 +5,16 @@ import {
   ReplacerFunction,
   PercentageMask,
   CenterPercentageMask,
-} from "../typings";
+} from '../typings';
 
 const percentageValueMasker = (
   value: any,
-  mask: PercentageMask | CenterPercentageMask
+  mask: PercentageMask | CenterPercentageMask,
 ): string | undefined => {
-  const redactor = mask.redactWith ?? "•";
+  const redactor = mask.redactWith ?? '•';
   const percentage = mask.percentage ?? 100;
-  const complementary =
-    (mask.position === "center" && mask.complementary) ?? false;
-  const position = mask.position ?? "left";
+  const complementary = (mask.position === 'center' && mask.complementary) ?? false;
+  const position = mask.position ?? 'left';
 
   const finalRedactor = (p1: string): string =>
     redactor.length > 1 ? redactor : p1.replace(/./g, redactor);
@@ -28,10 +27,10 @@ const percentageValueMasker = (
   const unmaskedLength = stringLength - maskedLength;
 
   const regexString = (): string => {
-    if (position === "center") {
+    if (position === 'center') {
       return `(.{${unmaskedLength / 2}})(.{${maskedLength}})(.+)`;
     }
-    if (position === "right") {
+    if (position === 'right') {
       return `(.{${unmaskedLength}})(.{${maskedLength}})`;
     }
     return `(.{${maskedLength}})(.{${unmaskedLength}})`;
@@ -48,7 +47,7 @@ const percentageValueMasker = (
       // Center
       return `${p1}${finalRedactor(p2)}${p3}`;
     }
-    if (position === "right") {
+    if (position === 'right') {
       // Right
       return `${p1}${finalRedactor(p2)}`;
     }
@@ -62,15 +61,15 @@ const percentageValueMasker = (
 };
 
 export const redactIt: RedactIt = (
-  configs?: RedactItConfig | RedactItConfig[]
+  configs?: RedactItConfig | RedactItConfig[],
 ): ReplacerFunction => {
   const defaultMask: Mask = {
-    type: "replace",
-    redactWith: "[redacted]",
+    type: 'replace',
+    redactWith: '[redacted]',
   };
 
   const defaultOptions: RedactItConfig = {
-    fields: ["password"],
+    fields: ['password'],
     mask: defaultMask,
   };
 
@@ -107,10 +106,10 @@ export const redactIt: RedactIt = (
   const replacer = (key: any, value: any): any => {
     const mask = getMaskForKey(key);
     if (mask) {
-      if (mask.type === "replace") {
+      if (mask.type === 'replace') {
         return mask.redactWith;
       }
-      if (mask.type === "undefine") {
+      if (mask.type === 'undefine') {
         return undefined;
       }
       return percentageValueMasker(value, mask);

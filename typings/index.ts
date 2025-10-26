@@ -1,16 +1,12 @@
-export type Mask =
-  | PercentageMask
-  | CenterPercentageMask
-  | UndefineMask
-  | ReplaceMask;
+export type Mask = PercentageMask | CenterPercentageMask | UndefineMask | ReplaceMask;
 
 export interface PercentageMask {
-  type: "percentage";
+  type: 'percentage';
   /**
    * Character to be used as the redacted part
    * @default "•"
    */
-  redactWith?: "*" | "•" | string;
+  redactWith?: '*' | '•' | string;
   /**
    * Percentage of the value to apply the mask on
    * @default 100
@@ -20,17 +16,17 @@ export interface PercentageMask {
    * Which part of the value to redact
    * @default "left"
    */
-  position?: "left" | "right";
+  position?: 'left' | 'right';
 }
 
 export interface CenterPercentageMask {
-  type: "percentage";
-  position: "center";
+  type: 'percentage';
+  position: 'center';
   /**
    * Character to be used as the redacted part
    * @default "•"
    */
-  redactWith?: "*" | "•" | string;
+  redactWith?: '*' | '•' | string;
   /**
    * Percentage of the value to apply the mask on
    * @default 100
@@ -44,15 +40,15 @@ export interface CenterPercentageMask {
 }
 
 export interface UndefineMask {
-  type: "undefine";
+  type: 'undefine';
 }
 export interface ReplaceMask {
-  type: "replace";
+  type: 'replace';
   /**
    * Replace the value entirely with this string
    * @default "[redacted]"
    */
-  redactWith: "[redacted]" | string;
+  redactWith: '[redacted]' | string;
 }
 
 /** Redact-it configs to customize how and which fields are going to be redacted */
@@ -72,6 +68,4 @@ export type ReplacerFunction = (key: any, value: any) => any;
  *  @param {RedactItConfig | RedactItConfig[]} configs - RedactItConfig to customize the redact function
  *  @return {ReplacerFunction} replacer - A replacer function compatible with JSON.stringify
  */
-export type RedactIt = (
-  configs?: RedactItConfig | RedactItConfig[]
-) => ReplacerFunction;
+export type RedactIt = (configs?: RedactItConfig | RedactItConfig[]) => ReplacerFunction;
